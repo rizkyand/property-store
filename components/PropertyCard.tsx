@@ -1,10 +1,19 @@
+'use client';
 import Image from "next/image";
 import {Property} from "@/models/dtos/PropertyDTO";
 import Link from "next/link";
 import {FaBed, FaBath, FaRulerCombined, FaMoneyBill, FaMapMarker} from "react-icons/fa";
+import {motion} from "framer-motion";
 
 const PropertyCard:React.FC<{ property: Property }> = ({property}) => {
     return(
+        <motion.div
+            initial={
+                {scale:0}
+            }
+            animate={{scale:1}}
+            transition={{type:'spring', duration:1.5}}
+        >
         <div className="rounded-xl shadow-md relative">
             <Image
                 src={`/images/${property.images[0]}`}
@@ -65,6 +74,7 @@ const PropertyCard:React.FC<{ property: Property }> = ({property}) => {
                 </div>
             </div>
         </div>
+        </motion.div>
     );
 }
 

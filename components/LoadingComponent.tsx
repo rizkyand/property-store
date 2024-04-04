@@ -7,7 +7,7 @@ const override:CSSProperties = {
     margin: '100px auto'
 }
 
-const LoadingPage = () => {
+const LoadingComponent = () => {
     return(
         <HashLoader
             color={'#3b82f6'}
@@ -18,4 +18,4 @@ const LoadingPage = () => {
         />
     );
 }
-export default LoadingPage;
+export default LoadingComponent;

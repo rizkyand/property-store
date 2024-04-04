@@ -1,10 +1,28 @@
+
 import properties from '@/properties.json'
-import propertyCard from "@/components/PropertyCard";
 import {Property} from "@/models/dtos/PropertyDTO";
 import PropertyCard from "@/components/PropertyCard";
 import Link from "next/link";
-const HomeProperties = () => {
+import {getAllProperties} from "@/config/DataFetching";
+import {useEffect, useState} from "react";
+
+const HomeProperties =async () => {
+    // const [prop, setProp] = useState<Property[]>([]);
+    // useEffect(()=>{
+    //     const fetchData = async () => {
+    //         try {
+    //             const props = await getAllProperties();
+    //             const datas:Property[] = props;
+    //             setProp(datas);
+    //         }catch (err){
+    //
+    //         }
+    //     };
+    //     fetchData();
+    // }, [prop]);
+    const prop = await getAllProperties();
     const randomRecentProperty:Property[] = properties.sort(()=>Math.random()-Math.random()).slice(0,3);
+    //const randomRecentProperty:Property[] = prop.sort(()=>Math.random()-Math.random()).slice(0,3);
     return(
         <>
         <section className="px-4 py-6">
