@@ -10,7 +10,9 @@ const Footer = () => {
                 className="container mx-auto flex flex-col md:flex-row items-center justify-between px-4"
             >
                 <div className="mb-4 md:mb-0">
-                    <Image src={logo} alt="Logo" className="h-8 w-auto"/>
+                    <Link href={'/'}>
+                        <Image src={logo} alt="Logo" className="h-8 w-auto"/>
+                    </Link>
                 </div>
                 <div
                     className="flex flex-wrap justify-center md:justify-start mb-4 md:mb-0"

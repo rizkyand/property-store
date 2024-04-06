@@ -1,8 +1,10 @@
-import Link from "next/link";
-import properties from '@/properties.json'
-import PropertyCard from "@/components/PropertyCard";
 
-const PropertyPage = () => {
+import PropertyCard from "@/components/PropertyCard";
+import {getAllProperties} from "@/config/DataFetching";
+import {Property} from "@/models/dtos/PropertyDTO";
+
+const PropertyPage = async ()=> {
+    const properties:Property[] = await getAllProperties();
     return (
         <section className="px-4 py-6">
             <div className="container-xl lg:container m-auto px-4 py-6">

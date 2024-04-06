@@ -1,40 +1,70 @@
 'use client';
-import properties from '@/properties.json';
 import {usePathname} from "next/navigation";
 import {PropertyDTO} from "@/models/dtos/PropertyDTO";
 import PropertyImageHeader from "@/components/PropertyImageHeader";
 import PropertyDetailPage from "@/components/PropertyDetailPage";
-import {Suspense} from "react";
+import {Suspense, useEffect, useState} from "react";
 import LoadingComponent from "@/components/LoadingComponent";
 import { motion } from "framer-motion"
+import {getPropertyById} from "@/config/DataFetching";
+import NotFoundPage from "@/app/not-found";
 
 
 const DetailProperty = () => {
-    const pathName = usePathname();
-    let getPathNum= pathName.match(/\d+/);
-    const page:string = getPathNum !== null ? getPathNum[0] : '';
-    const res:PropertyDTO = properties.filter((a) => a._id === page)[0];
-    console.log(res);
+    const [property, setProperty] = useState<PropertyDTO>();
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>('');
+    const pathName:string = usePathname();
+    const page:string = pathName.match(/[^/]+$/)?.[0] ?? '';
+    useEffect(()=> {
+        const fetchDataProperty = async (id:string) =>{
+            try {
+                const data:PropertyDTO = await getPropertyById(id);
+                setProperty(data);
+                setLoading(false);
+                console.log(data);
+            } catch (e) {
+                setError('Error fetching data');
+                setLoading(false);
+                console.error(e);
+            }
+        }
+        if (page) {
+            fetchDataProperty(page);
+        }
+
+    }, [page]);
+    if (loading) {
+        return <LoadingComponent />;
+    }
+
+    if (error) {
+        return <NotFoundPage/>;
+    }
     return(
         <Suspense fallback={<LoadingComponent/>}>
-            <motion.div
-                initial={
-                    {opacity:0}
-                }
-                animate={{opacity:1}}
-                transition={{ease:'easeInOut', duration:1}}
-            >
-                <PropertyImageHeader image={res.images[0]}/>
-            </motion.div>
-            <motion.div
-                initial={
-                    {y:200}
-                }
-                animate={{y:0}}
-                transition={{type:'spring', duration:2, bounce:0.4}}
-            >
-                <PropertyDetailPage props={res}/>
-            </motion.div>
+            {property &&
+                <>
+                    <motion.div
+                        initial={
+                            {opacity: 0}
+                        }
+                        animate={{opacity: 1}}
+                        transition={{ease: 'easeInOut', duration: 1}}
+                    >
+                        <PropertyImageHeader image={property.images[0]}/>
+                    </motion.div>
+                    <motion.div
+                        initial={
+                            {y: 200}
+                        }
+                        animate={{y: 0}}
+                        transition={{type: 'spring', duration: 2, bounce: 0.2}}
+                    >
+                        <PropertyDetailPage props={property}/>
+                    </motion.div>
+                </>
+            }
         </Suspense>
     );
 }
